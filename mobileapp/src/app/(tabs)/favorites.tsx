@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import type { ContentItem } from '@/types/domain';
-import { contentService } from '@/services/content.service';
+import { StyleSheet } from 'react-native';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
-import { ContentList } from '@/components/lists/ContentList';
-import { EmptyState } from '@/components/ui/StateView';
-import { useContentStore } from '@/hooks/use-content-store';
-export default function FavoritesScreen() { const { favorites } = useContentStore(); const [items, setItems] = useState<ContentItem[]>([]); useEffect(() => { Promise.all(favorites.map((id) => contentService.getById(id))).then(setItems).catch(() => setItems([])); }, [favorites]); return <Screen><Text variant="title">Favoris</Text>{items.length ? <ContentList data={items} /> : <EmptyState title="Aucun favori" message="Ajoutez des contenus à votre sélection privée." />}</Screen>; }
+import { recipes } from '@/lib/perle-data';
+import { RecipeCard, Section } from '@/components/perle/PerleUI';
+import { Spacing } from '@/constants/theme';
+export default function FavoritesScreen(){const favs=recipes.filter(r=>r.isNew);return <Screen scroll contentContainerStyle={styles.content}><Text variant="hero">Favoris</Text><Text>Retrouvez vos recettes et vidéos enregistrées.</Text><Section title={favs.length?'Vos favoris':'Aucun favori'}>{favs.map(r=><RecipeCard key={r.id} recipe={r}/>)}</Section></Screen>}
+const styles=StyleSheet.create({content:{gap:Spacing.five,paddingBottom:110}});
