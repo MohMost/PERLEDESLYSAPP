@@ -1,12 +1,30 @@
 import { Link } from 'expo-router';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LoginForm } from '@/components/forms/LoginForm';
-import { Card } from '@/components/ui/Card';
-import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
-import { Spacing } from '@/constants/theme';
 
 export default function LoginScreen() {
-  return <Screen scroll contentContainerStyle={styles.content}><ImageBackground source={{ uri: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1200&h=800&fit=crop' }} style={styles.hero} imageStyle={styles.heroImage}><View style={styles.overlay}><Text variant="hero" style={{ color: '#fff' }}>PERLEDESLYS</Text><Text style={{ color: '#fff', textAlign: 'center' }}>Votre espace beauté privé, rose poudré et doré.</Text></View></ImageBackground><Card><Text variant="title">Connexion</Text><Text muted>Backend mocké : premium@perledelys.app / password ou code LYS-PRIVE-2026.</Text><LoginForm /><Link href="/(auth)/forgot-password" asChild><Text variant="label" style={{ textAlign: 'center' }}>Mot de passe oublié ?</Text></Link></Card></Screen>;
+  const [mode, setMode] = useState<'password' | 'code'>('password');
+
+  return <SafeAreaView className="flex-1 bg-[#fbf3f1]">
+    <View className="min-h-full px-6 pb-10 pt-6">
+      <Link href="/" asChild><Pressable className="-ml-2 self-start rounded-full p-2"><Text className="text-xl text-stone-800">←</Text></Pressable></Link>
+
+      <View className="mt-4 flex-row items-center gap-2.5">
+        <View className="h-11 w-11 items-center justify-center rounded-full bg-rose-400 shadow-lg"><Text className="text-xl font-semibold text-white">P</Text></View>
+        <View><Text className="text-base font-semibold tracking-[3px] text-stone-900">PERLEDESLYS</Text><Text className="text-[9px] uppercase tracking-[2.5px] text-rose-500">Espace privé</Text></View>
+      </View>
+
+      <View className="mt-8">
+        <Text className="text-[42px] leading-[48px] text-stone-900">Bon retour{`\n`}<Text className="italic text-rose-500">parmi nous.</Text></Text>
+        <Text className="mt-3 text-sm text-stone-500">Retrouvez vos recettes, lives et tutoriels TM7 exclusifs.</Text>
+      </View>
+
+      <LoginForm mode={mode} onModeChange={setMode} />
+
+      <View className="mt-auto pt-8"><Text className="text-center text-xs text-stone-500">Vous êtes cliente Thermomix et n'avez pas encore d'accès ?</Text><Pressable><Text className="mt-1 text-center text-xs font-semibold text-rose-500">Demander une invitation à Lys</Text></Pressable></View>
+    </View>
+  </SafeAreaView>;
 }
-const styles = StyleSheet.create({ content: { gap: Spacing.five }, hero: { height: 280, borderRadius: 32, overflow: 'hidden', justifyContent: 'flex-end' }, heroImage: { borderRadius: 32 }, overlay: { flex: 1, justifyContent: 'flex-end', alignItems: 'center', gap: Spacing.three, padding: Spacing.six, backgroundColor: 'rgba(46,37,40,0.35)' } });
