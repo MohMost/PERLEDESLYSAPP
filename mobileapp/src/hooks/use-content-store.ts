@@ -1,3 +1,3 @@
-import { useStore } from '@/hooks/use-store';
-import { contentStore } from '@/store/content.store';
-export function useContentStore() { return useStore(contentStore); }
+import { useContentStore } from '@/store/content.store';
+export { useContentStore };
+export const useContent = useContentStore;
