@@ -1,12 +1,8 @@
-import { Link } from 'expo-router';
-import { Image } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
 import { Screen } from '@/components/ui/Screen';
-import { Card } from '@/components/ui/Card';
 import { Text } from '@/components/ui/Text';
-import { Button } from '@/components/ui/Button';
-import { useAuth } from '@/hooks/use-auth';
-import { authStore } from '@/store/auth.store';
+import { events, faqItems, user } from '@/lib/perle-data';
+import { ArticleCard, Section, perle } from '@/components/perle/PerleUI';
 import { Spacing } from '@/constants/theme';
-export default function ProfileScreen() { const { user } = useAuth(); return <Screen scroll><Card style={{ alignItems: 'center' }}>{user ? <Image source={{ uri: user.avatarUrl }} style={styles.avatar} /> : null}<Text variant="title">{user?.name}</Text><Text muted>{user?.email}</Text><Text variant="label">Statut {user?.role} · accès privé {user?.hasAccessCode ? 'activé' : 'non activé'}</Text></Card><Card><Text variant="subtitle">Espace profile</Text><Text muted>Modifier profil, avatar, préférences, historique et contenus sauvegardés.</Text><Link href="/(protected)/profile/edit" asChild><Button>Modifier mon profil</Button></Link><Link href="/(protected)/settings" asChild><Button variant="secondary">Paramètres</Button></Link><Button variant="ghost" onPress={() => void authStore.logout()}>Logout</Button></Card><View style={{ height: Spacing.six }} /></Screen>; }
-const styles = StyleSheet.create({ avatar: { width: 104, height: 104, borderRadius: 52 } });
+export default function ProfileScreen(){return <Screen scroll contentContainerStyle={styles.content}><View style={styles.profile}><Text style={styles.avatar}>👩🏻‍🍳</Text><View><Text variant="title">{user.name}</Text><Text>{user.email}</Text></View></View><Section title="Historique récent">{events.slice(0,3).map(e=><ArticleCard key={e.id} article={{id:e.id,title:e.title,excerpt:e.description??'À retrouver dans votre calendrier privé.',category:e.type,readTime:e.time,image:''}} />)}</Section><Section title="FAQ">{faqItems.map(f=><View key={f.q} style={styles.faq}><Text variant="subtitle">{f.q}</Text><Text>{f.a}</Text></View>)}</Section></Screen>}
+const styles=StyleSheet.create({content:{gap:Spacing.five,paddingBottom:110},profile:{flexDirection:'row',alignItems:'center',gap:16,backgroundColor:perle.card,padding:16,borderRadius:28},avatar:{fontSize:44},faq:{backgroundColor:perle.card,borderColor:perle.border,borderWidth:1,borderRadius:18,padding:14,gap:6}});
